@@ -19,7 +19,7 @@ def index(request):
     # переменной контекста context
     return render(
         request,
-        'index.html',
+        'catalog/index.html',
         context={
             'num_books': num_books,
             'num_instances': num_instances,
@@ -29,3 +29,19 @@ def index(request):
             'num_books_with_war': num_books_with_war,
         }
     )
+
+from django.views import generic
+
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 10
+
+class BookDetailView(generic.DetailView):
+    model = Book
+
+class AuthorListView(generic.ListView):
+        model = Author
+        paginate_by = 10
+
+class AuthorDetailView(generic.DetailView):
+        model = Author
