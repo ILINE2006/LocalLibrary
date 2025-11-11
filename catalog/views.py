@@ -11,6 +11,8 @@ def index(request):
     # Доступные книги (статус = 'a')
     num_instances_available=BookInstance.objects.filter(status__exact='a').count()
     num_authors=Author.objects.count()  # Метод 'all()' применён по умолчанию.
+    num_visits = request.session.get('num_visits', 0) #тут изменения
+    request.session['num_visits'] = num_visits + 1 #тут изменения
 
     num_genres = Genre.objects.count()  # количество жанров
     num_books_with_war = Book.objects.filter(title__icontains='war').count()
@@ -19,12 +21,13 @@ def index(request):
     # переменной контекста context
     return render(
         request,
-        'catalog/index.html',
+        'index.html',
         context={
             'num_books': num_books,
             'num_instances': num_instances,
             'num_instances_available': num_instances_available,
             'num_authors': num_authors,
+            'num_visits': num_visits, #тут изменения
             'num_genres': num_genres,
             'num_books_with_war': num_books_with_war,
         }
