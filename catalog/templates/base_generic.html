@@ -32,12 +32,13 @@
               <li><a href="{% url 'books' %}">All books</a></li>
               <li><a href="{% url 'authors' %}">All authors</a></li>
                 <li>
-                    {% if user.is_authenticated %}
-                  <form method="post" action="{% url 'logout' %}" style="display:inline;">
-                    {% csrf_token %}
-                    <input type="submit" value="logout" class="btn btn-link">
-                  </form>
-                    {% endif %}
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'all-borrowed' %}">All borrowed</a></li>
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                {% csrf_token %}
+                  <input type="submit" value="logout" class="btn btn-link">
+                </form>
+                {% endif %}
                 </li>
             </ul>
           {% endblock %}
