@@ -1,6 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse, reverse_lazy
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import ListView, DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Book, Author, BookInstance, Genre
-
+from .forms import RenewBookForm
+import datetime
 def index(request):
     """
     Функция отображения для домашней страницы сайта.
@@ -49,7 +56,6 @@ class AuthorListView(generic.ListView):
 class AuthorDetailView(generic.DetailView):
         model = Author
 
-from django.contrib.auth.mixins import LoginRequiredMixin
 
 class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
     """
@@ -78,13 +84,7 @@ class AllBorrowedBooksListView(PermissionRequiredMixin, ListView):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
 
 from django.contrib.auth.decorators import permission_required
-
 from django.shortcuts import get_object_or_404
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-import datetime
-
-from .forms import RenewBookForm
 
 @permission_required('catalog.can_mark_returned')
 def renew_book_librarian(request, pk):
@@ -115,14 +115,11 @@ def renew_book_librarian(request, pk):
 
     return render(request, 'catalog/book_renew_librarian.html', {'form': form, 'bookinst':book_inst})
 
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from .models import Author
-
-class AuthorCreate(CreateView):
+class AuthorCreate(PermissionRequiredMixin, CreateView):
     model = Author
-    fields = '__all__'
-    initial={'date_of_death':'12/10/2016',}
+    fields = ['first_name', 'last_name', 'date_of_birth', 'date_of_death']
+    initial = {'date_of_death': '11/11/2023'}
+    permission_required = 'catalog.add_author'
 
 class AuthorUpdate(UpdateView):
     model = Author
@@ -131,11 +128,6 @@ class AuthorUpdate(UpdateView):
 class AuthorDelete(DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
-
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views.generic import CreateView, UpdateView, DeleteView
-from django.urls import reverse_lazy
-from .models import Book
 
 # Создание книги
 class BookCreate(PermissionRequiredMixin, CreateView):
