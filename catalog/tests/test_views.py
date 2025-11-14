@@ -200,7 +200,6 @@ class AuthorCreateViewTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # Получаем URL редиректа и проверяем, что он ведёт на author-detail
-        # Пример: /catalog/author/5/
         self.assertRedirects(response, response.url)
 
         # Убеждаемся, что автор реально создан в базе

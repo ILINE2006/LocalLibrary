@@ -11,10 +11,15 @@
           {% if bookinst.borrower %}
             - {{ bookinst.borrower.get_username }}
           {% endif %}
+        {% if perms.catalog.can_mark_returned %}
+             <a href="{% url 'renew-book-librarian' bookinst.pk %}">Renew</a>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>
   {% else %}
     <p>No books currently on loan.</p>
   {% endif %}
+
+
 {% endblock %}

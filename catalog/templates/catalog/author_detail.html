@@ -19,4 +19,10 @@
     <p>This author has not written any books.</p>
   {% endif %}
 
+    <div style="margin-top: 30px; border-top: 1px solid #ccc; padding-top: 20px;">
+    <h4>Действия с Автором:</h4>
+    <a href="{% url 'author_update' author.pk %}" class="btn btn-primary">Редактировать автора</a>
+    <a href="{% url 'author_delete' author.pk %}" class="btn btn btn-danger">Удалить автора</a>
+  </div>
+
 {% endblock %}

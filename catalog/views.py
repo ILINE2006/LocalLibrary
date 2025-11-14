@@ -67,9 +67,9 @@ class LoanedBooksByUserListView(LoginRequiredMixin,generic.ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+        # только для вошедших пользователей книги, borrower=self.request.user книги текущего пользователь,
+        # status__exact='o' только  книги (on loan), сортировка по дате возврата
 
-from django.contrib.auth.mixins import PermissionRequiredMixin
-from django.views.generic import ListView
 
 class AllBorrowedBooksListView(PermissionRequiredMixin, ListView):
     """
@@ -84,7 +84,6 @@ class AllBorrowedBooksListView(PermissionRequiredMixin, ListView):
         return BookInstance.objects.filter(status__exact='o').order_by('due_back')
 
 from django.contrib.auth.decorators import permission_required
-from django.shortcuts import get_object_or_404
 
 @permission_required('catalog.can_mark_returned')
 def renew_book_librarian(request, pk):

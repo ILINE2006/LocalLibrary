@@ -15,11 +15,8 @@ class Genre(models.Model):
         """
         return self.name
 
-from django.db import models
-
-
 class Language(models.Model):
-    """Модель, представляющая язык книги (например, Казалидсткий, Квикиш)."""
+    """Модель, представляющая язык книги Казалидсткий, Квикиш."""
     name = models.CharField(
         max_length=100,
         help_text="Введите язык книги (например, 'Казалидсткий', 'Квикиш')"
